@@ -1,0 +1,55 @@
+name: Build and Deploy Angular App
+
+on:
+  workflow_call:
+    inputs:
+      pythonVersion:
+        required: true
+        type: string
+      nodejsVersion:
+        required: true
+        type: string
+
+
+jobs:
+  build-angular:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ci-${{ github.workflow }}
+      cancel-in-progress: true
+
+    steps:
+        - uses: actions/checkout@v4
+
+        - name: Set up build env
+          uses: ./.github/actions/SetupBuildEnv
+          id: setup_build_env
+          with:
+            pythonVersion: ${{ inputs.pythonVersion }}
+            nodejsVersion: ${{ inputs.nodejsVersion }}
+
+        - name: Install dependencies
+          run: npm install
+
+        - name: Build Angular app
+          run: npm run build --prod
+
+        - name: Upload build artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            name: artifacts-build
+            path: dist
+
+  deploy-angular:
+    runs-on: ubuntu-latest
+    needs: build-angular
+    concurrency:
+      group: ci-${{ github.workflow }}
+      cancel-in-progress: true
+
+    steps:
+
+      - name: sleep for 10 seconds
+        run: sleep 10
+
+
