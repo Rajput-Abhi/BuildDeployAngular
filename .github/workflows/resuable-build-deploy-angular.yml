@@ -25,8 +25,8 @@ jobs:
           run: |
             echo " USERNAME = ${{vars.USERNAME}}"
             echo "REUSABLE_USERNAME = ${{vars.REUSABLE_USERNAME}}"
-            echo "PASSWORD = ${{secrets.REUSABLE_PASSWORD}}"
-            echo "RESUABLE_PASSWORD = ${{secrets.REUSABLE_PASSWORD}}"
+            echo "PASSWORD = ${{secrets.PASSWORD}}"
+            echo "REUSABLE_PASSWORD = ${{secrets.REUSABLE_PASSWORD}}"
 
         - name: Set up build env
           uses: ./.github/actions/SetupBuildEnv
